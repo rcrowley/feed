@@ -51,6 +51,10 @@ func (f *Feed) Add(date, path string, n *html.Node) error {
 				html.Not(html.IsAtom(atom.Time)),
 				html.HasAttr("class", "feed"),
 			))
+			if f.Entries[i].Content.DataAtom == atom.Body {
+				f.Entries[i].Content.Data = "div"
+				f.Entries[i].Content.DataAtom = atom.Div
+			}
 		}
 		if f.Entries[i].Content == nil {
 			return fmt.Errorf("no <article> or element with class=\"feed\" in %s", path)
