@@ -78,12 +78,14 @@ func (f *Feed) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		{xml.Name{Local: "rel"}, "alternate"},
 	}})
 	e.EncodeToken(xml.EndElement{xml.Name{Local: "link"}}) // encoding/xml doesn't support self-closing tags
-	u.Path = f.Path
-	e.EncodeToken(xml.StartElement{xml.Name{Local: "link"}, []xml.Attr{
-		{xml.Name{Local: "href"}, u.String()},
-		{xml.Name{Local: "rel"}, "self"},
-	}})
-	e.EncodeToken(xml.EndElement{xml.Name{Local: "link"}}) // encoding/xml doesn't support self-closing tags
+	if f.Path != "" {
+		u.Path = f.Path
+		e.EncodeToken(xml.StartElement{xml.Name{Local: "link"}, []xml.Attr{
+			{xml.Name{Local: "href"}, u.String()},
+			{xml.Name{Local: "rel"}, "self"},
+		}})
+		e.EncodeToken(xml.EndElement{xml.Name{Local: "link"}}) // encoding/xml doesn't support self-closing tags
+	}
 
 	e.EncodeToken(xml.StartElement{xml.Name{Local: "title"}, nil})
 	e.EncodeToken(xml.CharData(f.Title))

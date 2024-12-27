@@ -49,9 +49,11 @@ Synopsis: feed scans each <docroot> (or the current working directory) for <arti
 
 	feed := &Feed{
 		Author: *author,
-		Path:   "index.atom.xml", // FIXME might mismatch -o
 		Title:  *title,
 		URL:    *url,
+	}
+	if *output != "-" {
+		feed.Path = *output
 	}
 
 	var wg sync.WaitGroup
