@@ -104,7 +104,11 @@ func (f *Feed) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 		content := html.Find(entry.Node, html.IsAtom(atom.Article))
 		if content == nil {
-			return fmt.Errorf("no <article> in %s", entry.Path)
+			log.Printf("# no <article> in %s, using <body>", entry.Path)
+			content = html.Find(entry.Node, html.IsAtom(atom.Body))
+		}
+		if content == nil {
+			return fmt.Errorf("no <article> or <body> in %s", entry.Path)
 		}
 		h1 := html.Find(content, html.IsAtom(atom.H1))
 		if h1 == nil {
