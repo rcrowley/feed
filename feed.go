@@ -30,7 +30,7 @@ type Feed struct {
 	t  time.Time
 }
 
-func (f *Feed) Add(date, path string, n *html.Node) {
+func (f *Feed) Add(date, path string, n *html.Node) error {
 	if filepath.Base(path) == "index.html" {
 		path = filepath.Dir(path) + "/"
 	}
@@ -43,8 +43,26 @@ func (f *Feed) Add(date, path string, n *html.Node) {
 		copy(f.Entries[i+1:], f.Entries[i:])
 		f.Entries[i].Date = date
 		f.Entries[i].Path = path
-		f.Entries[i].Node = n
+
+		f.Entries[i].Content = html.Find(n, html.IsAtom(atom.Article))
+		if f.Entries[i].Content == nil {
+			log.Printf("# no <article> in %s, using class=\"feed\"", path)
+			f.Entries[i].Content = html.Find(n, html.All(
+				html.Not(html.IsAtom(atom.Time)),
+				html.HasAttr("class", "feed"),
+			))
+		}
+		if f.Entries[i].Content == nil {
+			return fmt.Errorf("no <article> or element with class=\"feed\" in %s", path)
+		}
+
+		f.Entries[i].H1 = html.Find(f.Entries[i].Content, html.IsAtom(atom.H1))
+		if f.Entries[i].H1 == nil {
+			return fmt.Errorf("no <h1> in %s", path)
+		}
+
 	}
+	return nil
 }
 
 func (f *Feed) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -102,19 +120,6 @@ func (f *Feed) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		}
 		i++
 
-		content := html.Find(entry.Node, html.IsAtom(atom.Article))
-		if content == nil {
-			log.Printf("# no <article> in %s, using <body>", entry.Path)
-			content = html.Find(entry.Node, html.IsAtom(atom.Body))
-		}
-		if content == nil {
-			return fmt.Errorf("no <article> or <body> in %s", entry.Path)
-		}
-		h1 := html.Find(content, html.IsAtom(atom.H1))
-		if h1 == nil {
-			return fmt.Errorf("no <h1> in %s", entry.Path)
-		}
-
 		e.EncodeToken(xml.StartElement{xml.Name{Local: "entry"}, nil})
 
 		u.Path = entry.Path
@@ -128,7 +133,7 @@ func (f *Feed) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		e.EncodeToken(xml.EndElement{xml.Name{Local: "link"}}) // encoding/xml doesn't support self-closing tags
 
 		e.EncodeToken(xml.StartElement{xml.Name{Local: "title"}, nil})
-		e.EncodeToken(xml.CharData(html.Text(h1).String()))
+		e.EncodeToken(xml.CharData(html.Text(entry.H1).String()))
 		e.EncodeToken(xml.EndElement{xml.Name{Local: "title"}})
 
 		e.EncodeToken(xml.StartElement{xml.Name{Local: "updated"}, nil})
@@ -143,7 +148,7 @@ func (f *Feed) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		e.EncodeToken(xml.EndElement{xml.Name{Local: "updated"}})
 
 		e.EncodeToken(xml.StartElement{xml.Name{Local: "content"}, []xml.Attr{{xml.Name{Local: "type"}, "html"}}})
-		e.EncodeToken(xml.CharData(html.String(content)))
+		e.EncodeToken(xml.CharData(html.String(entry.Content)))
 		e.EncodeToken(xml.EndElement{xml.Name{Local: "content"}})
 
 		e.EncodeToken(xml.EndElement{xml.Name{Local: "entry"}})

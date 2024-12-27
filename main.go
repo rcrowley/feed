@@ -67,7 +67,7 @@ Synopsis: feed scans each <docroot> (or the current working directory) for <arti
 					html.IsAtom(atom.Time),
 					html.HasAttr("class", "feed"),
 				)); t != nil {
-					feed.Add(html.Attr(t, "datetime"), path, n)
+					must(feed.Add(html.Attr(t, "datetime"), path, n))
 				}
 			}()
 		}

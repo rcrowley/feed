@@ -15,13 +15,10 @@ func TestFeed(t *testing.T) {
 		Path:   "index.atom.xml",
 		Title:  "Site Name",
 		URL:    "http://example.com",
+		t:      time.Now(),
+	}
 
-		Entries: []Entry{
-			{
-				Date: "2024-12-03 22:28:00",
-				Path: "newest.html",
-
-				Node: must2(html.ParseString(`<!DOCTYPE html>
+	f.Add("2024-12-03 22:28:00", "newest.html", must2(html.ParseString(`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -36,12 +33,9 @@ func TestFeed(t *testing.T) {
 </article>
 </body>
 </html>
-`)),
-			},
-			{
-				Date: "1970-01-01 00:00:00",
-				Path: "oldest.html",
-				Node: must2(html.ParseString(`<!DOCTYPE html>
+`)))
+
+	f.Add("1970-01-01 00:00:00", "oldest.html", must2(html.ParseString(`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -56,12 +50,8 @@ func TestFeed(t *testing.T) {
 </article>
 </body>
 </html>
-`)),
-			},
-		},
+`)))
 
-		t: time.Now(),
-	}
 	stdout := &bytes.Buffer{}
 	if err := f.Render(stdout); err != nil {
 		t.Fatal(err)
@@ -102,13 +92,30 @@ func TestFeed(t *testing.T) {
 </feed>
 `, f.t.Format(time.RFC3339))
 	if actual != expected {
+		fmt.Println(actual)
+		fmt.Println(expected)
 		t.Fatalf("actual: %s != expected: %s", actual, expected)
 	}
 }
 
 func TestFeedAddIndexHTML(t *testing.T) {
 	f := &Feed{}
-	f.Add("1970-01-01", "test/index.html", nil)
+	f.Add("1970-01-01", "test/index.html", must2(html.ParseString(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Article Title — Site Name</title>
+</head>
+<body>
+<header><h1>Site Name</h1></header>
+<article class="body">
+<time datetime="1970-01-01 00:00:00">1970-01-01 00:00:00</time>
+<h1>Article Title</h1>
+<p>Article body.</p>
+</article>
+</body>
+</html>
+`)))
 	if len(f.Entries) != 1 || f.Entries[0].Path != "test/" {
 		t.Fatalf("%+v", f.Entries)
 	}
