@@ -97,10 +97,11 @@ func (f *Feed) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	var i int
 	for _, entry := range f.Entries {
-		i++
 		if i == FeedLength {
 			break
 		}
+		i++
+
 		content := html.Find(entry.Node, html.IsAtom(atom.Article))
 		if content == nil {
 			return fmt.Errorf("no <article> in %s", entry.Path)
