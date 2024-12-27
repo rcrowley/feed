@@ -27,10 +27,11 @@ func Main(args []string, stdin io.Reader, stdout io.Writer) {
   -o <output>   write to this file instead of standard output
   -t <title>    feed title
   -u <url>      site URL with scheme and domain
+  -v            verbose mode
   -x <exclude>  subdirectory of <docroot> to exclude (may be repeated)
   <docroot>     document root directory to scan (defaults to the current working directory)
 
-Synopsis: feed scans each <docroot> (or the current working directory) for <article class="feed"> elements that contain <time> elements, sorts them by those <time> elements, and constructs an Atom feed containing the most recent 10 articles.
+Synopsis: feed scans each <docroot> (or the current working directory) for <article> elements or other containers (including <body>) with class="feed" that contain a <time class="feed"> element, sorts them by those <time> elements, and constructs an Atom feed containing the most recent 10 articles.
 `)
 	}
 	flags.Parse(args[1:])
