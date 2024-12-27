@@ -80,10 +80,17 @@ Synopsis: feed scans each <docroot> (or the current working directory) for <arti
 				"frag %s %s # %s\n", // "frag %q %q # %s\n",
 				"<h1>", entry.Path, entry.Date,
 			)
-			fmt.Printf(
-				"frag %s %s # %s\n", // "frag %q %q # %s\n",
-				"<article>", entry.Path, entry.Date,
-			)
+			if entry.Content.DataAtom == atom.Article {
+				fmt.Printf(
+					"frag %s %s # %s\n", // "frag %q %q # %s\n",
+					"<article>", entry.Path, entry.Date,
+				)
+			} else {
+				fmt.Printf(
+					"frag '<%s class=\"feed\">' %s # %s\n", // "frag '<%s class=\"feed\">' %q # %s\n",
+					entry.Content.DataAtom, entry.Path, entry.Date,
+				)
+			}
 		}
 	}
 

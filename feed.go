@@ -51,10 +51,6 @@ func (f *Feed) Add(date, path string, n *html.Node) error {
 				html.Not(html.IsAtom(atom.Time)),
 				html.HasAttr("class", "feed"),
 			))
-			if f.Entries[i].Content.DataAtom == atom.Body {
-				f.Entries[i].Content.Data = "div"
-				f.Entries[i].Content.DataAtom = atom.Div
-			}
 		}
 		if f.Entries[i].Content == nil {
 			return fmt.Errorf("no <article> or element with class=\"feed\" in %s", path)
@@ -152,6 +148,10 @@ func (f *Feed) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		e.EncodeToken(xml.EndElement{xml.Name{Local: "updated"}})
 
 		e.EncodeToken(xml.StartElement{xml.Name{Local: "content"}, []xml.Attr{{xml.Name{Local: "type"}, "html"}}})
+		if entry.Content.DataAtom == atom.Body {
+			entry.Content.Data = "div"
+			entry.Content.DataAtom = atom.Div
+		}
 		e.EncodeToken(xml.CharData(html.String(entry.Content)))
 		e.EncodeToken(xml.EndElement{xml.Name{Local: "content"}})
 
