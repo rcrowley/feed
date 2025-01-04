@@ -92,8 +92,6 @@ func TestFeed(t *testing.T) {
 </feed>
 `, f.t.Format(time.RFC3339))
 	if actual != expected {
-		fmt.Println(actual)
-		fmt.Println(expected)
 		t.Fatalf("actual: %s != expected: %s", actual, expected)
 	}
 }
