@@ -23,7 +23,7 @@ feed -a <author> [-o <output>] -t <title> -u <url> [-v] [-x <exclude>[...]] [<do
 * `-u <url>`: site URL with scheme and domain
 * `-v`: verbose mode
 * `-x <exclude>`: subdirectory of <docroot> to exclude (may be repeated)
-* `<docroot>`: document root directory to scan (defaults to the current working directory)
+* `<docroot>`: document root directory to scan (defaults to the current working directory; may be repeated)
 
 See also
 --------
