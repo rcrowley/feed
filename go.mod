@@ -1,6 +1,6 @@
 module github.com/rcrowley/feed
 
-go 1.24.3
+go 1.24.5
 
 require (
 	github.com/rcrowley/mergician v0.0.0-20250508040501-ff2f38fdb6b2
