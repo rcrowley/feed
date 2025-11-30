@@ -1,8 +1,8 @@
-github.com/rcrowley/mergician v0.0.0-20250803034602-2e03e8206018 h1:V+ieDTpc85yDD4q1P9O8MtvLRX53Brh/bLB9jDarZuw=
-github.com/rcrowley/mergician v0.0.0-20250803034602-2e03e8206018/go.mod h1:wd4GD8U7Ie+yZc8mINWhvYTOByxsklCSYxltVxoKyWw=
+github.com/rcrowley/mergician v0.0.0-20251130073118-e00557126233 h1:riLTEkxAshFvn+TRyXqfx0RIIxGUUTaJ1+5OIqMLk7s=
+github.com/rcrowley/mergician v0.0.0-20251130073118-e00557126233/go.mod h1:d1O8lLOnazx0MYixoLofqOsnyY44lGCH3WRv+F8vGXo=
 github.com/yuin/goldmark v1.7.13 h1:GPddIs617DnBLFFVJFgpo1aBfe/4xcvMc3SB5t/D0pA=
 github.com/yuin/goldmark v1.7.13/go.mod h1:ip/1k0VRfGynBgxOz0yCqHrbZXhcjxyuS66Brc7iBKg=
 golang.org/x/exp v0.0.0-20250808145144-a408d31f581a h1:Y+7uR/b1Mw2iSXZ3G//1haIiSElDQZ8KWh0h+sZPG90=
 golang.org/x/exp v0.0.0-20250808145144-a408d31f581a/go.mod h1:rT6SFzZ7oxADUDx58pcaKFTcZ+inxAa9fTrYx/uVYwg=
-golang.org/x/net v0.43.0 h1:lat02VYK2j4aLzMzecihNvTlJNQUq316m2Mr9rnM6YE=
-golang.org/x/net v0.43.0/go.mod h1:vhO1fvI4dGsIjh73sWfUVjj3N7CA9WkKJNQm2svM6Jg=
+golang.org/x/net v0.47.0 h1:Mx+4dIFzqraBXUugkia1OOvlD6LemFo1ALMHjrXDOhY=
+golang.org/x/net v0.47.0/go.mod h1:/jNxtkgq5yWUGYkaZGqo27cfGZ1c5Nen03aYrrKpVRU=

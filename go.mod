@@ -1,10 +1,10 @@
 module github.com/rcrowley/feed
 
-go 1.24.6
+go 1.25.4
 
 require (
-	github.com/rcrowley/mergician v0.0.0-20250803034602-2e03e8206018
-	golang.org/x/net v0.43.0
+	github.com/rcrowley/mergician v0.0.0-20251130073118-e00557126233
+	golang.org/x/net v0.47.0
 )
 
 require (
