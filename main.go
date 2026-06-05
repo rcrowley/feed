@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/rcrowley/mergician/files"
 	"github.com/rcrowley/mergician/html"
@@ -16,6 +17,7 @@ import (
 func Main(args []string, stdin io.Reader, stdout io.Writer) {
 	flags := flag.NewFlagSet(args[0], flag.ExitOnError)
 	author := flags.String("a", "", "author's name")
+	now := flags.String("n", "", "reference time for scheduling and expiry (\"2006-01-02 15:04:05\" or \"2006-01-02\"; defaults to the current time)")
 	output := flags.String("o", "-", "write to this file instead of standard output")
 	title := flags.String("t", "", "feed title")
 	url := flags.String("u", "", "site URL with scheme and domain")
@@ -24,6 +26,8 @@ func Main(args []string, stdin io.Reader, stdout io.Writer) {
 	flags.Usage = func() {
 		fmt.Fprint(os.Stderr, `Usage: feed -a <author> [-o <output>] -t <title> -u <url> [-v] [-x <exclude>[...]] [<docroot>[...]]
   -a <author>   author's name
+  -n <now>      reference time for scheduling and expiry ("2006-01-02 15:04:05"
+                or "2006-01-02"; defaults to the current time)
   -o <output>   write to this file instead of standard output
   -t <title>    feed title
   -u <url>      site URL with scheme and domain
@@ -48,6 +52,14 @@ Synopsis: feed scans each <docroot> (or the current working directory) for <arti
 	}
 	lists := must2(files.AllHTML(docroots, *exclude))
 
+	// Resolve the reference time once so the feed reflects exactly what's
+	// published at that instant: drafts, not-yet-published, and expired pages
+	// are left out, consistent with the document root electrostatic builds.
+	reference := time.Now()
+	if *now != "" {
+		reference = must2(files.ParseDate(*now))
+	}
+
 	feed := &Feed{
 		Author: *author,
 		Title:  *title,
@@ -64,6 +76,9 @@ Synopsis: feed scans each <docroot> (or the current working directory) for <arti
 			go func() {
 				defer wg.Done()
 				n := must2(files.Parse(path))
+				if !files.IsPublished(n, reference) {
+					return
+				}
 				if t := html.Find(n, html.All(
 					html.IsAtom(atom.Time),
 					html.HasAttr("class", "feed"),
