@@ -1,13 +1,13 @@
 module github.com/rcrowley/feed
 
-go 1.25.4
+go 1.26.5
 
 require (
-	github.com/rcrowley/mergician v0.0.0-20251130073118-e00557126233
-	golang.org/x/net v0.47.0
+	github.com/rcrowley/mergician v0.0.0-20260728204653-d6bcef79538e
+	golang.org/x/net v0.57.0
 )
 
 require (
-	github.com/yuin/goldmark v1.7.13 // indirect
-	golang.org/x/exp v0.0.0-20250808145144-a408d31f581a // indirect
+	github.com/yuin/goldmark v1.8.5 // indirect
+	golang.org/x/exp v0.0.0-20260727155853-b88d891fe743 // indirect
 )
