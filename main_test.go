@@ -19,7 +19,7 @@ func TestMain(t *testing.T) {
 	<id>http://example.com/</id>
 	<link href="http://example.com/" rel="alternate"></link>
 	<title>Site Name</title>
-	<updated>[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[-+][0-9]{2}:[0-9]{2}</updated>
+	<updated>[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(Z|[-+][0-9]{2}:[0-9]{2})</updated>
 </feed>
 `
 	if matched, err := regexp.MatchString(pattern, actual); err != nil {
